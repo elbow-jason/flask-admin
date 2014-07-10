@@ -477,7 +477,7 @@ class Admin(object):
     def _add_view_to_menu(self, view):
         self._add_menu_item(MenuView(view.name, view), view.category)
 
-    def init_app(self, app):
+    def init_app(self, app, name='admin'):
         """
             Register all views with the Flask application.
 
@@ -486,17 +486,17 @@ class Admin(object):
         """
         self.app = app
 
-        self._init_extension()
+        self._init_extension(name)
 
         # Register views
         for view in self._views:
             app.register_blueprint(view.create_blueprint(self))
 
-    def _init_extension(self):
+    def _init_extension(self, name):
         if not hasattr(self.app, 'extensions'):
             self.app.extensions = dict()
 
-        admins = self.app.extensions.get('admin', [])
+        admins = self.app.extensions.get(name, [])
 
         for p in admins:
             if p.endpoint == self.endpoint:
@@ -508,7 +508,7 @@ class Admin(object):
                                 u' URL and subdomain to the same application.')
 
         admins.append(self)
-        self.app.extensions['admin'] = admins
+        self.app.extensions[name] = admins
 
     def menu(self):
         """
