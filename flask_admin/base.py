@@ -486,13 +486,13 @@ class Admin(object):
         """
         self.app = app
 
-        self._init_extension(name)
+        self._init_extension(name=name)
 
         # Register views
         for view in self._views:
             app.register_blueprint(view.create_blueprint(self))
 
-    def _init_extension(self, name):
+    def _init_extension(self, name='admin'):
         if not hasattr(self.app, 'extensions'):
             self.app.extensions = dict()
 
